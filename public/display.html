@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gym Timer</title>
+  <link rel="stylesheet" href="/css/display.css">
+</head>
+<body id="display" class="phase-idle">
+  <!-- QR splash screen — shown until a controller connects -->
+  <div id="qr-splash">
+    <div id="splash-title">GYM TIMER</div>
+    <canvas id="qr-splash-canvas"></canvas>
+    <div id="splash-instruction">SCAN TO CONNECT</div>
+    <div id="splash-url"></div>
+    <div id="splash-hint">Click anywhere for fullscreen &bull; Waiting for controller...</div>
+  </div>
+
+  <!-- Fullscreen exit hint -->
+  <div id="fullscreen-hint">ESC or F11 to exit fullscreen</div>
+
+  <!-- Mode label -->
+  <div id="mode-label">CLOCK</div>
+
+  <!-- Main time display -->
+  <div id="time-display">00:00</div>
+
+  <!-- Round info -->
+  <div id="round-info" class="hidden"></div>
+
+  <!-- Phase indicator (WORK / REST / PREP) -->
+  <div id="phase-label" class="hidden"></div>
+
+  <!-- Progress bar -->
+  <div id="progress-container" class="hidden">
+    <div id="progress-bar"></div>
+  </div>
+
+  <!-- Connection warning -->
+  <div id="conn-warning" class="hidden">DISCONNECTED</div>
+
+  <!-- QR code for phone control -->
+  <div id="qr-corner">
+    <canvas id="qr-canvas"></canvas>
+    <div id="qr-label">Scan to control</div>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/js/qr.js"></script>
+  <script src="/js/timer-engine.js"></script>
+  <script src="/js/audio.js"></script>
+  <script src="/js/display.js"></script>
+</body>
+</html>

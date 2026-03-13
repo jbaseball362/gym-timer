@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Gym Timer — Coach Quick Start Guide</title>
+<style>
+  @page { size: letter; margin: 0.5in; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', Arial, Helvetica, sans-serif;
+    font-size: 10.5pt;
+    color: #1a1a1a;
+    line-height: 1.4;
+    max-width: 7.5in;
+    margin: 0 auto;
+    padding: 0.5in;
+  }
+
+  h1 {
+    font-size: 22pt;
+    text-align: center;
+    margin-bottom: 3px;
+    letter-spacing: 1px;
+  }
+  .subtitle {
+    text-align: center;
+    font-size: 10pt;
+    color: #666;
+    margin-bottom: 14px;
+    border-bottom: 2px solid #222;
+    padding-bottom: 8px;
+  }
+
+  .columns { display: flex; gap: 20px; }
+  .col { flex: 1; }
+
+  h2 {
+    font-size: 12pt;
+    background: #222;
+    color: #fff;
+    padding: 4px 10px;
+    margin: 10px 0 6px 0;
+    border-radius: 3px;
+  }
+  h2 .step-num {
+    display: inline-block;
+    background: #e63946;
+    color: #fff;
+    width: 20px; height: 20px;
+    text-align: center; line-height: 20px;
+    border-radius: 50%;
+    font-size: 11pt;
+    margin-right: 5px;
+  }
+
+  ol, ul { padding-left: 18px; margin-bottom: 4px; }
+  li { margin-bottom: 3px; }
+
+  .mode-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px 12px;
+    font-size: 10pt;
+    margin: 4px 0;
+  }
+  .mode-grid .mode {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px dotted #ccc;
+    padding: 2px 0;
+  }
+  .mode .name { font-weight: 600; }
+  .mode .desc { color: #555; text-align: right; }
+
+  .key {
+    display: inline-block;
+    background: #eee;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    padding: 0 5px;
+    font-family: monospace;
+    font-size: 10pt;
+  }
+
+  .color-legend {
+    display: flex;
+    gap: 10px;
+    margin: 4px 0;
+    font-size: 10pt;
+  }
+  .color-swatch {
+    display: inline-block;
+    width: 14px; height: 14px;
+    border-radius: 2px;
+    vertical-align: middle;
+    margin-right: 3px;
+  }
+
+  .tip {
+    background: #fff3cd;
+    border-left: 3px solid #ffc107;
+    padding: 5px 8px;
+    font-size: 10pt;
+    margin: 8px 0;
+  }
+
+  .footer {
+    text-align: center;
+    font-size: 8.5pt;
+    color: #999;
+    margin-top: 10px;
+    border-top: 1px solid #ddd;
+    padding-top: 6px;
+  }
+
+  @media print {
+    body { padding: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    h2 { background: #222 !important; color: #fff !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    h2 .step-num { background: #e63946 !important; color: #fff !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .color-swatch { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .tip { background: #fff3cd !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .key { background: #eee !important; border: 1px solid #ccc !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .subtitle { border-bottom: 2px solid #222 !important; }
+    .footer { border-top: 1px solid #ddd !important; }
+  }
+</style>
+</head>
+<body>
+
+<h1>GYM TIMER — COACH QUICK START</h1>
+<div class="subtitle">Connect your phone, pick a workout, and go.</div>
+
+<div class="columns">
+<div class="col">
+
+<h2><span class="step-num">1</span> Start the Timer</h2>
+<ol>
+  <li>Make sure the <strong>laptop</strong> is on and the TV is showing the timer screen.</li>
+  <li>If not running, double-click the <strong>"Gym Timer"</strong> icon on the desktop.</li>
+  <li><strong>Click anywhere</strong> on the screen to go fullscreen. Press <span class="key">ESC</span> to exit.</li>
+</ol>
+
+<h2><span class="step-num">2</span> Connect Your Phone</h2>
+<ol>
+  <li>Make sure your phone is on the <strong>same WiFi network</strong> as the laptop.</li>
+  <li><strong>Scan the QR code</strong> on the TV with your phone camera.</li>
+  <li>Enter the coach password: <strong>coach123</strong></li>
+  <li>The QR screen will dismiss and the timer is ready. Sound works automatically.</li>
+</ol>
+
+<h2><span class="step-num">3</span> Choose a Timer Mode</h2>
+<p>Tap a mode on your phone, configure time/rounds, then tap <strong>Start</strong>.</p>
+<div class="mode-grid">
+  <div class="mode"><span class="name">Clock</span><span class="desc">Wall clock</span></div>
+  <div class="mode"><span class="name">Stopwatch</span><span class="desc">Count up, no limit</span></div>
+  <div class="mode"><span class="name">Countdown</span><span class="desc">Set a time, counts down</span></div>
+  <div class="mode"><span class="name">Count Up</span><span class="desc">Count up to a target</span></div>
+  <div class="mode"><span class="name">EMOM</span><span class="desc">Every Min on the Min</span></div>
+  <div class="mode"><span class="name">Tabata</span><span class="desc">20s work / 10s rest</span></div>
+  <div class="mode"><span class="name">Interval</span><span class="desc">Custom work/rest</span></div>
+  <div class="mode"><span class="name">Fight Gone Bad</span><span class="desc">5 × 1:00 + 1:00 rest</span></div>
+  <div class="mode"><span class="name">Warm Up</span><span class="desc">Countdown (default 10 min)</span></div>
+</div>
+<p style="font-size:10pt; margin-top:3px;">20 presets also available under Interval mode.</p>
+
+<h2><span class="step-num">4</span> Screen Colors</h2>
+<div class="color-legend">
+  <span><span class="color-swatch" style="background:#ff8c00;"></span> <strong>Orange</strong> = Prep</span>
+  <span><span class="color-swatch" style="background:#00c853;"></span> <strong>Green</strong> = Work</span>
+  <span><span class="color-swatch" style="background:#e63946;"></span> <strong>Red</strong> = Rest / Final 3s</span>
+</div>
+<p style="font-size:10pt;">Display pulses <strong>red</strong> during the final 3 seconds. "TIME!" is announced on completion.</p>
+
+</div>
+<div class="col">
+
+<h2><span class="step-num">5</span> Controls</h2>
+<p><strong>From your phone:</strong></p>
+<ul>
+  <li><strong>Play / Pause</strong> — main control buttons</li>
+  <li><strong>Reset</strong> — restart the current timer</li>
+  <li><strong>Stop</strong> — end the workout, return to clock</li>
+</ul>
+<p style="margin-top:4px;"><strong>From the laptop keyboard:</strong></p>
+<ul>
+  <li><span class="key">Space</span> Play / Pause</li>
+  <li><span class="key">R</span> Reset &nbsp;&nbsp; <span class="key">S</span> Stop &nbsp;&nbsp; <span class="key">F11</span> Toggle fullscreen</li>
+</ul>
+
+<h2><span class="step-num">6</span> Settings (on phone)</h2>
+<p>Tap <strong>Settings</strong> at the bottom of the controller:</p>
+<ul>
+  <li><strong>Brightness</strong> — screen brightness (1–5)</li>
+  <li><strong>Volume</strong> — beep volume (0–5, 0 = mute)</li>
+  <li><strong>12/24hr</strong> — toggle clock format</li>
+  <li><strong>Prep Countdown</strong> — 10-second lead-in before workout</li>
+  <li><strong>Test Sound</strong> — verify audio is working</li>
+</ul>
+
+<h2><span class="step-num">7</span> Troubleshooting</h2>
+<ul>
+  <li><strong>QR won't scan?</strong> — Type the URL shown below the QR code into your phone browser.</li>
+  <li><strong>No sound?</strong> — Make sure the timer was launched from the desktop icon. Check volume is above 0.</li>
+  <li><strong>"DISCONNECTED"?</strong> — Refresh the browser. Your phone will auto-reconnect.</li>
+  <li><strong>Phone disconnected?</strong> — It reconnects automatically. If not, refresh and re-enter password.</li>
+  <li><strong>Can't exit fullscreen?</strong> — Press <span class="key">ESC</span> or <span class="key">F11</span>.</li>
+</ul>
+
+<div class="tip">
+  <strong>Tip:</strong> You can tap number values on the controller (minutes, seconds, rounds) to type them directly instead of using the +/- buttons.
+</div>
+
+</div>
+</div>
+
+<div class="footer">
+  Gym Timer &bull; Keep this guide near the laptop for easy reference
+</div>
+
+</body>
+</html>

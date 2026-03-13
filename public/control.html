@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Gym Timer — Remote</title>
+  <link rel="stylesheet" href="/css/control.css">
+</head>
+<body>
+  <!-- Login overlay -->
+  <div id="login-overlay" class="login-overlay">
+    <div class="login-box">
+      <h2>Coach Login</h2>
+      <p>Enter the coach password to control the timer.</p>
+      <input type="password" id="login-password" placeholder="Password"
+             autocomplete="off" inputmode="text">
+      <div id="login-error" class="login-error"></div>
+      <button id="login-btn" onclick="attemptLogin()">UNLOCK</button>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <div class="header">
+    <h1>GYM TIMER</h1>
+    <div id="conn-status" class="status">Connecting...</div>
+  </div>
+
+  <!-- Current state mirror -->
+  <div class="current-state">
+    <div id="ctrl-time" class="current-time">--:--</div>
+    <div id="ctrl-mode" class="current-mode">CLOCK</div>
+    <div id="ctrl-phase" class="current-phase"></div>
+    <div id="ctrl-round" style="font-size: 13px; color: #888; margin-top: 4px;"></div>
+  </div>
+
+  <!-- Transport controls -->
+  <div class="transport">
+    <button class="btn-play" onclick="sendCommand('play')">START</button>
+    <button class="btn-pause" onclick="sendCommand('pause')">PAUSE</button>
+    <button class="btn-stop" onclick="sendCommand('stop')">STOP</button>
+    <button class="btn-reset" onclick="sendCommand('reset')">RESET</button>
+  </div>
+
+  <!-- Mode selection -->
+  <div class="section">
+    <div class="section-title">Select Mode</div>
+    <div class="mode-grid">
+      <div class="mode-btn" data-mode="clock" onclick="selectMode('clock')">
+        <div class="mode-icon">&#128336;</div>
+        Clock
+      </div>
+      <div class="mode-btn" data-mode="stopwatch" onclick="selectMode('stopwatch')">
+        <div class="mode-icon">&#9201;</div>
+        Stopwatch
+      </div>
+      <div class="mode-btn" data-mode="emom" onclick="selectMode('emom')">
+        <div class="mode-icon">&#9889;</div>
+        EMOM
+      </div>
+      <div class="mode-btn" data-mode="fgb" onclick="selectMode('fgb')">
+        <div class="mode-icon">&#128293;</div>
+        FGB
+      </div>
+      <div class="mode-btn" data-mode="interval" onclick="selectMode('interval')">
+        <div class="mode-icon">&#128260;</div>
+        Interval
+      </div>
+      <div class="mode-btn" data-mode="tabata" onclick="selectMode('tabata')">
+        <div class="mode-icon">&#9200;</div>
+        Tabata
+      </div>
+      <div class="mode-btn" data-mode="countdown" onclick="selectMode('countdown')">
+        <div class="mode-icon">&#8987;</div>
+        Countdown
+      </div>
+      <div class="mode-btn" data-mode="countup" onclick="selectMode('countup')">
+        <div class="mode-icon">&#9650;</div>
+        Count Up
+      </div>
+      <div class="mode-btn" data-mode="warmup" onclick="selectMode('warmup')">
+        <div class="mode-icon">&#128164;</div>
+        Warm Up
+      </div>
+    </div>
+  </div>
+
+  <!-- Config panel (changes based on selected mode) -->
+  <div class="section" id="config-section" style="display:none;">
+    <div class="section-title" id="config-title">Settings</div>
+    <div id="config-content"></div>
+    <button class="start-workout-btn" id="start-btn" onclick="startWorkout()">START WORKOUT</button>
+  </div>
+
+  <!-- Presets section -->
+  <div class="section" id="presets-section" style="display:none;">
+    <div class="section-title">Pre-Programmed Intervals</div>
+    <div class="preset-list" id="preset-list"></div>
+  </div>
+
+  <!-- Device settings -->
+  <div class="section">
+    <div class="settings-toggle" onclick="toggleSettings()">
+      <span>&#9881; Display Settings</span>
+      <span id="settings-arrow" class="settings-arrow">&#9660;</span>
+    </div>
+    <div id="settings-body" style="display:none;">
+
+    <div class="slider-row">
+      <label>Brightness</label>
+      <input type="range" min="1" max="5" value="5" id="brightness-slider"
+             oninput="setBrightness(this.value)">
+      <span class="slider-val" id="brightness-val">5</span>
+    </div>
+
+    <div class="slider-row">
+      <label>Volume</label>
+      <input type="range" min="0" max="5" value="3" id="volume-slider"
+             oninput="setVolume(this.value)">
+      <span class="slider-val" id="volume-val">3</span>
+    </div>
+
+    <div style="padding: 8px 0;">
+      <button onclick="sendCommand('test-sound')"
+        style="background:#444; border:none; color:#fff; padding:10px 20px; border-radius:6px; font-size:14px; cursor:pointer; width:100%;">
+        Test Sound on Display
+      </button>
+    </div>
+
+    <div class="toggle-row">
+      <span style="font-size:14px; color:#ccc;">24-Hour Clock</span>
+      <label class="toggle">
+        <input type="checkbox" id="toggle-24hr" onchange="toggle24hr()">
+        <span class="toggle-slider"></span>
+      </label>
+    </div>
+
+    <div class="toggle-row">
+      <span style="font-size:14px; color:#ccc;">10s Prep Countdown</span>
+      <label class="toggle">
+        <input type="checkbox" id="toggle-prep" checked onchange="togglePrep()">
+        <span class="toggle-slider"></span>
+      </label>
+    </div>
+    </div>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/js/timer-engine.js"></script>
+  <script src="/js/control.js"></script>
+</body>
+</html>
