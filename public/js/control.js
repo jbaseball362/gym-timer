@@ -53,6 +53,7 @@ socket.io.on('reconnect_attempt', () => {
 });
 
 // Receive state updates from display
+const pauseBtn = document.querySelector('.btn-pause');
 socket.on('state-sync', (state) => {
   ctrlTime.textContent = state.time || '--:--';
   ctrlMode.textContent = state.mode ? state.mode.toUpperCase() : '';
@@ -61,6 +62,15 @@ socket.on('state-sync', (state) => {
   ctrlPhase.className = 'current-phase ' + (state.phase || '');
 
   ctrlRound.textContent = state.round || '';
+
+  // Toggle pause/resume button text
+  if (state.status === 'paused') {
+    pauseBtn.textContent = 'RESUME';
+    pauseBtn.onclick = () => sendCommand('play');
+  } else {
+    pauseBtn.textContent = 'PAUSE';
+    pauseBtn.onclick = () => sendCommand('pause');
+  }
 });
 
 // Send command to server
