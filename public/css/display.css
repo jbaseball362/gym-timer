@@ -22,11 +22,14 @@ body.cursor-hidden {
 }
 
 #mode-label {
-  font-size: 4vw;
-  letter-spacing: 0.3em;
-  color: #666;
+  position: fixed;
+  bottom: 1.5vh;
+  left: 2vw;
+  font-size: 1.5vw;
+  letter-spacing: 0.15em;
+  color: #444;
   text-transform: uppercase;
-  margin-bottom: 1vh;
+  opacity: 0.6;
 }
 
 #time-display {
