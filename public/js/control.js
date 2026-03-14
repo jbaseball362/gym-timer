@@ -73,14 +73,28 @@ socket.on('state-sync', (state) => {
   }
 });
 
-// Haptic feedback for button presses
-function haptic(ms = 30) {
+// Button feedback: haptic (Android) + click sound (all devices)
+let clickCtx;
+function buttonFeedback(ms = 30) {
   if (navigator.vibrate) navigator.vibrate(ms);
+  try {
+    if (!clickCtx) clickCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = clickCtx.createOscillator();
+    const gain = clickCtx.createGain();
+    osc.connect(gain);
+    gain.connect(clickCtx.destination);
+    osc.frequency.value = 1200;
+    osc.type = 'sine';
+    gain.gain.setValueAtTime(0.15, clickCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, clickCtx.currentTime + 0.04);
+    osc.start(clickCtx.currentTime);
+    osc.stop(clickCtx.currentTime + 0.04);
+  } catch (e) {}
 }
 
 // Send command to server
 function sendCommand(action, extra = {}) {
-  haptic();
+  buttonFeedback();
   socket.emit('command', { action, ...extra });
 }
 
@@ -511,7 +525,7 @@ function loadPreset(preset) {
 
 // Start workout
 function startWorkout() {
-  haptic(50);
+  buttonFeedback(50);
   sendCommand('play');
 }
 
