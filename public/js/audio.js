@@ -26,7 +26,16 @@ class AudioManager {
     source.connect(this.ctx.destination);
     source.start(0);
     this.unlocked = true;
-    // Audio unlocked
+    // Keep AudioContext alive — prevent browser from suspending it
+    this._keepAlive = setInterval(() => {
+      if (this.ctx && this.ctx.state === 'running') {
+        const buf = this.ctx.createBuffer(1, 1, 22050);
+        const src = this.ctx.createBufferSource();
+        src.buffer = buf;
+        src.connect(this.ctx.destination);
+        src.start(0);
+      }
+    }, 20000);
   }
 
   // Alias for backward compat
@@ -46,7 +55,7 @@ class AudioManager {
     }
 
     if (this.ctx.state === 'suspended') {
-      return;
+      this.ctx.resume();
     }
 
     const osc = this.ctx.createOscillator();
