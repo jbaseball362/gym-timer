@@ -1,7 +1,7 @@
 {
   "name": "gym-timer",
   "version": "1.0.0",
-  "description": "CrossFit gym timer — Rogue-style display for TV with phone remote control",
+  "description": "CrossFit gym timer — TV display with phone remote control",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

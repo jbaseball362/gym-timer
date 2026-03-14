@@ -1,7 +1,7 @@
 # Gym Timer — Project Context
 
 ## Overview
-CrossFit gym timer web app modeled after the Rogue Fitness Home Timer (reference PDF in project root). Runs on an Ubuntu laptop connected via HDMI to a Roku TV mounted on the gym wall. Phone controls the timer over WiFi. Personal gym use only, not commercial.
+CrossFit gym timer web app. Runs on an Ubuntu laptop connected via HDMI to a Roku TV mounted on the gym wall. Phone controls the timer over WiFi. Personal gym use only, not commercial.
 
 ## User
 - Name: Josh
@@ -25,7 +25,6 @@ Gym Timer/
 ├── start-gym-timer.sh        # Launch script: starts server + opens browser (fullscreen, audio unlocked)
 ├── gym-timer-icon.svg        # Desktop shortcut icon
 ├── coach-guide.html          # Printable 1-page coach quick start guide
-├── Home_Timer_User_manual_fc3rem.pdf  # Rogue timer reference (2 pages)
 └── public/
     ├── display.html          # TV display page (full-screen timer)
     ├── control.html          # Phone controller page (login overlay + controls)
@@ -44,7 +43,7 @@ Gym Timer/
 - **TimerEngine** (`timer-engine.js`): Manages all timer modes, phases, ticking, beep callbacks
   - Modes: clock, stopwatch, emom, fgb, interval, countdown, countup, tabata, warmup
   - Phases: idle, prep, work, rest, complete
-  - `PRESETS` array: 20 pre-programmed intervals matching Rogue manual
+  - `PRESETS` array: 20 pre-programmed intervals for common CrossFit workouts
 - **AudioManager** (`audio.js`): Web Audio API beep generation
   - Audio auto-unlocks when browser launched with `--autoplay-policy=no-user-gesture-required` (see start-gym-timer.sh)
   - Beep types: tick (880Hz, 3-2-1 countdown), go (1000→1400Hz, work start), rest (440Hz, rest start), complete (800→1000→1200Hz triple)
@@ -63,7 +62,7 @@ Gym Timer/
 - Start: `npm start` (server only) or `./start-gym-timer.sh` (server + kiosk browser with audio unlocked)
 
 ## Key Features
-- All 9 timer modes matching Rogue manual
+- All 9 timer modes
 - 20 pre-programmed interval presets
 - Green (WORK) / Red (REST) / Orange (PREP) color indicators
 - 10-second prep countdown (togglable)
