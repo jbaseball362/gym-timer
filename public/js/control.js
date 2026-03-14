@@ -123,7 +123,7 @@ function makeEditable(spanId, onCommit, min = 0, max = 99) {
     input.inputMode = 'numeric';
     input.pattern = '[0-9]*';
     input.style.cssText = `
-      width: 60px; padding: 6px; text-align: center;
+      width: 60px; padding: 6px; text-align: right;
       font-size: 16px; font-family: 'Courier New', monospace;
       background: #333; color: #fff; border: 2px solid #ff2d2d;
       border-radius: 6px; outline: none;
@@ -131,7 +131,9 @@ function makeEditable(spanId, onCommit, min = 0, max = 99) {
 
     span.replaceWith(input);
     input.focus();
-    input.select();
+    // Place cursor at the end (right side)
+    const len = input.value.length;
+    input.setSelectionRange(len, len);
 
     const commit = () => {
       let val = parseInt(input.value, 10);
