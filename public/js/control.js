@@ -66,15 +66,21 @@ socket.on('state-sync', (state) => {
   // Toggle pause/resume button text
   if (state.status === 'paused') {
     pauseBtn.textContent = 'RESUME';
-    pauseBtn.onclick = () => sendCommand('play');
+    pauseBtn.onclick = () => { sendCommand('play'); };
   } else {
     pauseBtn.textContent = 'PAUSE';
     pauseBtn.onclick = () => sendCommand('pause');
   }
 });
 
+// Haptic feedback for button presses
+function haptic(ms = 30) {
+  if (navigator.vibrate) navigator.vibrate(ms);
+}
+
 // Send command to server
 function sendCommand(action, extra = {}) {
+  haptic();
   socket.emit('command', { action, ...extra });
 }
 
@@ -505,6 +511,7 @@ function loadPreset(preset) {
 
 // Start workout
 function startWorkout() {
+  haptic(50);
   sendCommand('play');
 }
 
