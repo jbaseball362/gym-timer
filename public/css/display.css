@@ -206,6 +206,14 @@ body.cursor-hidden {
   50% { opacity: 1; }
 }
 
+#splash-credit {
+  position: absolute;
+  bottom: 3vh;
+  font-size: 1vw;
+  color: #333;
+  letter-spacing: 0.05em;
+}
+
 /* QR code corner */
 #qr-corner {
   position: fixed;
