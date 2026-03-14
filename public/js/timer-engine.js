@@ -72,7 +72,7 @@ class TimerEngine {
     if (hours > 0 || forceHours) {
       result = `${hours}:${pad(minutes)}:${pad(seconds)}`;
     } else {
-      result = `${pad(minutes)}:${pad(seconds)}`;
+      result = `${minutes}:${pad(seconds)}`;
     }
     return negative ? `-${result}` : result;
   }
@@ -425,7 +425,7 @@ class TimerEngine {
         } else if (this.phase === 'idle') {
           result.time = this.formatTime(this.totalDurationMs / 1000 || 0);
         } else if (this.phase === 'complete') {
-          result.time = '00:00';
+          result.time = '0:00';
           result.phaseLabel = 'DONE';
         } else {
           const remaining = Math.max(0, this.phaseDurationMs - this.phaseElapsedMs);
@@ -451,7 +451,7 @@ class TimerEngine {
           result.time = this.formatTime(this.workTime);
           result.round = `0 / ${this.totalRounds}`;
         } else if (this.phase === 'complete') {
-          result.time = '00:00';
+          result.time = '0:00';
           result.phaseLabel = 'DONE';
           result.round = `${this.totalRounds} / ${this.totalRounds}`;
         } else {
