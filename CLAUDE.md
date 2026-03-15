@@ -1,10 +1,11 @@
 # Gym Timer — Project Context
 
 ## Overview
-CrossFit gym timer web app. Runs on an Ubuntu laptop connected via HDMI to a Roku TV mounted on the gym wall. Phone controls the timer over WiFi. Personal gym use only, not commercial.
+CrossFit gym timer web app built for a friend's gym. Runs on an Ubuntu laptop connected via HDMI to a Roku TV mounted on the gym wall. Phone controls the timer over WiFi. Personal gym use only, not commercial.
 
 ## User
 - Name: Josh
+- Gym belongs to Josh's friend Chrissy (no further personal details — respect her privacy)
 - Gym setup: Ubuntu laptop (Lenovo Yoga 730, Ubuntu 24.04) → HDMI → Roku TV (TV is just a monitor, browser runs on the laptop)
 - Phone: iPhone 15 Pro used as controller
 - Network: phone and laptop must be on the same WiFi network (guest WiFi isolation blocks access)
