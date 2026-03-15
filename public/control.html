@@ -41,6 +41,15 @@
     <button class="btn-reset" onclick="confirmAction(this, 'reset')">RESET</button>
   </div>
 
+  <!-- Lap controls (stopwatch only) -->
+  <div id="lap-section" style="display:none;">
+    <div class="transport">
+      <button class="btn-lap" onclick="recordLap()">LAP</button>
+      <button class="btn-clear-laps" onclick="clearLaps()">CLEAR LAPS</button>
+    </div>
+    <div id="lap-list" class="lap-list"></div>
+  </div>
+
   <!-- Mode selection -->
   <div class="section">
     <div class="section-title">Select Mode</div>

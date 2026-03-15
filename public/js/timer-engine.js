@@ -77,6 +77,25 @@ class TimerEngine {
     return negative ? `-${result}` : result;
   }
 
+  // Format milliseconds to MM:SS.cc (with hundredths)
+  formatTimeMs(ms) {
+    const totalSeconds = Math.floor(ms / 1000);
+    const hundredths = Math.floor((ms % 1000) / 10);
+    const hours = Math.floor(totalSeconds / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
+
+    const pad = (n) => String(n).padStart(2, '0');
+
+    let result;
+    if (hours > 0) {
+      result = `${hours}:${pad(minutes)}:${pad(seconds)}.${pad(hundredths)}`;
+    } else {
+      result = `${minutes}:${pad(seconds)}.${pad(hundredths)}`;
+    }
+    return result;
+  }
+
   // Get current clock time
   getClockTime() {
     const now = new Date();
@@ -201,10 +220,6 @@ class TimerEngine {
 
   stop() {
     this.status = 'stopped';
-    this.phase = 'idle';
-    this.elapsedMs = 0;
-    this.phaseElapsedMs = 0;
-    this.currentRound = 0;
     if (this.tickInterval) {
       clearInterval(this.tickInterval);
       this.tickInterval = null;
@@ -213,9 +228,11 @@ class TimerEngine {
   }
 
   reset() {
-    const currentMode = this.mode;
-    this.stop();
-    this.mode = currentMode;
+    this.phase = 'idle';
+    this.elapsedMs = 0;
+    this.phaseElapsedMs = 0;
+    this.currentRound = 0;
+    this.status = 'stopped';
     this._startTicking();
     this._emitUpdate();
   }
@@ -390,7 +407,7 @@ class TimerEngine {
         break;
 
       case 'stopwatch':
-        result.time = this.formatTime(this.elapsedMs / 1000);
+        result.time = this.formatTimeMs(this.elapsedMs);
         break;
 
       case 'countup':

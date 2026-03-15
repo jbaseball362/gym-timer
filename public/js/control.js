@@ -170,9 +170,11 @@ function selectMode(mode) {
     btn.classList.toggle('active', btn.dataset.mode === mode);
   });
 
-  // Show/hide config and presets
+  // Show/hide config, presets, and laps
   presetsSection.style.display = 'none';
   configSection.style.display = 'none';
+  document.getElementById('lap-section').style.display = mode === 'stopwatch' ? 'block' : 'none';
+  if (mode !== 'stopwatch') clearLaps();
 
   switch (mode) {
     case 'clock':
@@ -556,6 +558,72 @@ function toggle24hr() {
 
 function togglePrep() {
   sendCommand('set-prep', { enabled: document.getElementById('toggle-prep').checked });
+}
+
+// Lap tracking (stopwatch)
+let laps = [];
+let lastLapTime = '0:00';
+
+function recordLap() {
+  const currentTime = ctrlTime.textContent.trim();
+  const lapNum = laps.length + 1;
+  const splitTime = currentTime; // Total time at this lap
+
+  // Calculate split (difference from last lap)
+  let split = currentTime;
+  if (laps.length > 0) {
+    const curr = parseTimeToMs(currentTime);
+    const prev = parseTimeToMs(laps[laps.length - 1].total);
+    split = formatLapTime(curr - prev);
+  }
+
+  laps.push({ num: lapNum, total: currentTime, split: split });
+  lastLapTime = currentTime;
+  renderLaps();
+  sendCommand('lap', { num: lapNum, total: currentTime, split: split });
+}
+
+function parseTimeToMs(timeStr) {
+  // Handles M:SS.cc or H:MM:SS.cc
+  let hundredths = 0;
+  let main = timeStr;
+  if (timeStr.includes('.')) {
+    const [m, h] = timeStr.split('.');
+    main = m;
+    hundredths = parseInt(h, 10);
+  }
+  const parts = main.split(':').map(Number);
+  let seconds;
+  if (parts.length === 3) seconds = parts[0] * 3600 + parts[1] * 60 + parts[2];
+  else seconds = parts[0] * 60 + parts[1];
+  return seconds * 1000 + hundredths * 10;
+}
+
+function formatLapTime(ms) {
+  const totalSec = Math.floor(ms / 1000);
+  const hundredths = Math.floor((ms % 1000) / 10);
+  const min = Math.floor(totalSec / 60);
+  const sec = totalSec % 60;
+  return `${min}:${String(sec).padStart(2, '0')}.${String(hundredths).padStart(2, '0')}`;
+}
+
+function renderLaps() {
+  const list = document.getElementById('lap-list');
+  list.innerHTML = laps.slice().reverse().map(lap =>
+    `<div class="lap-row">
+      <span class="lap-num">Lap ${lap.num}</span>
+      <span class="lap-split">${lap.split}</span>
+      <span class="lap-total">${lap.total}</span>
+    </div>`
+  ).join('');
+}
+
+function clearLaps() {
+  laps = [];
+  lastLapTime = '0:00';
+  const list = document.getElementById('lap-list');
+  if (list) list.innerHTML = '';
+  sendCommand('clear-laps');
 }
 
 // Confirm destructive actions (Stop/Reset)

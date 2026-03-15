@@ -69,6 +69,14 @@ body.cursor-hidden {
   letter-spacing: 0.15em;
 }
 
+#lap-display {
+  font-size: 3vw;
+  color: #2196F3;
+  margin-top: 1.5vh;
+  letter-spacing: 0.1em;
+  min-height: 1em;
+}
+
 #phase-label {
   font-size: 5vw;
   font-weight: bold;

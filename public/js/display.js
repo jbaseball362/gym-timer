@@ -18,6 +18,7 @@ const modeLabel = document.getElementById('mode-label');
 const roundInfo = document.getElementById('round-info');
 const phaseLabel = document.getElementById('phase-label');
 const progressContainer = document.getElementById('progress-container');
+const lapDisplay = document.getElementById('lap-display');
 const progressBar = document.getElementById('progress-bar');
 
 // Mode display names
@@ -120,11 +121,19 @@ socket.on('command', (data) => {
 
     case 'stop':
       timer.stop();
-      timer.startMode('clock');
       break;
 
     case 'reset':
       timer.reset();
+      if (lapDisplay) lapDisplay.textContent = '';
+      break;
+
+    case 'lap':
+      if (lapDisplay) lapDisplay.textContent = `Lap ${data.num}  ${data.split}`;
+      break;
+
+    case 'clear-laps':
+      if (lapDisplay) lapDisplay.textContent = '';
       break;
 
     case 'toggle-24hr':
@@ -202,7 +211,6 @@ document.addEventListener('keydown', (e) => {
       break;
     case 's':
       timer.stop();
-      timer.startMode('clock');
       break;
   }
 });
