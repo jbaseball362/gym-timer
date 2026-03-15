@@ -37,7 +37,7 @@ body.cursor-hidden {
   font-weight: bold;
   letter-spacing: 0.05em;
   line-height: 1;
-  text-shadow: 0 0 40px currentColor;
+  text-shadow: 0 0 20px currentColor;
   transition: color 0.3s ease, font-size 0.2s ease;
   max-width: 95vw;
   white-space: nowrap;
@@ -130,8 +130,8 @@ body.cursor-hidden {
 }
 
 @keyframes urgent-pulse {
-  from { transform: scale(1);    text-shadow: 0 0 40px #ff2d2d; }
-  to   { transform: scale(1.08); text-shadow: 0 0 80px #ff2d2d, 0 0 120px #ff000088; }
+  from { transform: scale(1);    text-shadow: 0 0 20px #ff2d2d; }
+  to   { transform: scale(1.08); text-shadow: 0 0 40px #ff2d2d, 0 0 60px #ff000088; }
 }
 
 .phase-complete #time-display {
@@ -171,7 +171,7 @@ body.cursor-hidden {
   letter-spacing: 0.5em;
   color: #fff;
   margin-bottom: 4vh;
-  text-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+  text-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
 }
 
 #qr-splash-canvas {
