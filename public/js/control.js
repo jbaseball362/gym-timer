@@ -528,11 +528,6 @@ function loadPreset(preset) {
 }
 
 // Start workout
-function startWorkout() {
-  buttonFeedback(50);
-  sendCommand('play');
-}
-
 // Device settings
 function toggleSettings() {
   const body = document.getElementById('settings-body');

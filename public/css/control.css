@@ -515,27 +515,6 @@ body {
   border-radius: 4px;
 }
 
-/* Start button at bottom */
-.start-workout-btn {
-  display: block;
-  width: 100%;
-  padding: 16px;
-  background: #00ff41;
-  color: #000;
-  border: none;
-  border-radius: 8px;
-  font-size: 18px;
-  font-weight: 700;
-  cursor: pointer;
-  margin-top: 16px;
-  letter-spacing: 0.1em;
-}
-
-.start-workout-btn:active {
-  transform: scale(0.98);
-  background: #00cc33;
-}
-
 /* Settings section */
 .stepper-row {
   display: flex;
