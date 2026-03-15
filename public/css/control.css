@@ -2,6 +2,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  touch-action: manipulation;
 }
 
 /* Login overlay */
@@ -439,28 +440,45 @@ body {
 }
 
 /* Settings section */
-.slider-row {
+.stepper-row {
   display: flex;
   align-items: center;
-  gap: 12px;
+  justify-content: space-between;
   padding: 8px 0;
 }
 
-.slider-row label {
+.stepper-row label {
   font-size: 14px;
   color: #ccc;
-  min-width: 80px;
 }
 
-.slider-row input[type="range"] {
-  flex: 1;
-  accent-color: #ff2d2d;
+.stepper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
-.slider-row .slider-val {
-  font-size: 14px;
+.stepper-btn {
+  background: #444;
+  border: none;
   color: #fff;
-  min-width: 24px;
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.stepper-btn:active {
+  background: #666;
+}
+
+.stepper-val {
+  font-size: 18px;
+  font-weight: bold;
+  color: #fff;
+  min-width: 28px;
   text-align: center;
 }
 

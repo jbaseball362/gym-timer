@@ -137,6 +137,7 @@ socket.on('command', (data) => {
 
     case 'set-volume':
       audio.setVolume(data.level);
+      audio.tick();
       break;
 
     case 'set-prep':

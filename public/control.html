@@ -105,18 +105,22 @@
     </div>
     <div id="settings-body" style="display:none;">
 
-    <div class="slider-row">
+    <div class="stepper-row">
       <label>Brightness</label>
-      <input type="range" min="1" max="5" value="5" id="brightness-slider"
-             oninput="setBrightness(this.value)">
-      <span class="slider-val" id="brightness-val">5</span>
+      <div class="stepper">
+        <button class="stepper-btn" onclick="setBrightness(Math.max(1, parseInt(document.getElementById('brightness-val').textContent, 10) - 1))">−</button>
+        <span class="stepper-val" id="brightness-val">5</span>
+        <button class="stepper-btn" onclick="setBrightness(Math.min(5, parseInt(document.getElementById('brightness-val').textContent, 10) + 1))">+</button>
+      </div>
     </div>
 
-    <div class="slider-row">
+    <div class="stepper-row">
       <label>Volume</label>
-      <input type="range" min="0" max="5" value="3" id="volume-slider"
-             oninput="setVolume(this.value)">
-      <span class="slider-val" id="volume-val">3</span>
+      <div class="stepper">
+        <button class="stepper-btn" onclick="setVolume(Math.max(0, parseInt(document.getElementById('volume-val').textContent, 10) - 1))">−</button>
+        <span class="stepper-val" id="volume-val">5</span>
+        <button class="stepper-btn" onclick="setVolume(Math.min(5, parseInt(document.getElementById('volume-val').textContent, 10) + 1))">+</button>
+      </div>
     </div>
 
     <div style="padding: 8px 0;">
