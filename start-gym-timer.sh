@@ -11,6 +11,17 @@ URL="http://localhost:$PORT"
 # Detect OS
 OS="$(uname -s)"
 
+# Ensure the server is stopped on exit or interrupt
+cleanup() {
+  if [ -n "$SERVER_PID" ]; then
+    kill $SERVER_PID 2>/dev/null
+    wait $SERVER_PID 2>/dev/null
+  fi
+  echo ""
+  echo "Gym Timer stopped."
+}
+trap cleanup EXIT INT TERM
+
 # Check for Node.js
 if ! command -v node &> /dev/null; then
   echo "Error: Node.js is not installed."
@@ -54,7 +65,6 @@ done
 
 if ! curl -s "$URL" > /dev/null 2>&1; then
   echo "Error: Server failed to start on port $PORT"
-  kill $SERVER_PID 2>/dev/null
   exit 1
 fi
 
@@ -100,7 +110,20 @@ if [ -z "$BROWSER" ]; then
   exit 1
 fi
 
-echo "Opening display in $BROWSER..."
+# Print status
+echo ""
+echo "  Gym Timer is running!"
+echo ""
+echo "  Display:    $URL"
+echo "  Controller: $URL/control"
+echo "  Browser:    $BROWSER"
+if [ "$BROWSER_TYPE" = "firefox" ]; then
+  echo ""
+  echo "  Note: Firefox does not support automatic audio unlock."
+  echo "  You will need to tap the screen once to enable sound."
+  echo "  For the best experience, use Chrome or Edge."
+fi
+echo ""
 
 # Launch the browser with appropriate flags
 case "$OS" in
@@ -108,7 +131,6 @@ case "$OS" in
     if [ "$BROWSER_TYPE" = "chrome" ]; then
       $BROWSER --app="$URL" --start-maximized --autoplay-policy=no-user-gesture-required
     else
-      # Firefox: open in a new window, kiosk mode available via --kiosk
       $BROWSER --new-window "$URL"
     fi
     ;;
@@ -120,6 +142,3 @@ case "$OS" in
     fi
     ;;
 esac
-
-# When the browser closes, stop the server
-kill $SERVER_PID 2>/dev/null
