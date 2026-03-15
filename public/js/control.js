@@ -609,13 +609,27 @@ function formatLapTime(ms) {
 
 function renderLaps() {
   const list = document.getElementById('lap-list');
-  list.innerHTML = laps.slice().reverse().map(lap =>
+  let html = laps.slice().reverse().map(lap =>
     `<div class="lap-row">
       <span class="lap-num">Lap ${lap.num}</span>
       <span class="lap-split">${lap.split}</span>
       <span class="lap-total">${lap.total}</span>
     </div>`
   ).join('');
+
+  // Add summary if 2+ laps
+  if (laps.length >= 2) {
+    const splitMs = laps.map(lap => parseTimeToMs(lap.split));
+    const avg = splitMs.reduce((a, b) => a + b, 0) / splitMs.length;
+    const best = Math.min(...splitMs);
+    const bestLap = laps[splitMs.indexOf(best)];
+    html += `<div class="lap-summary">
+      <div><span class="lap-summary-label">Avg</span> <span>${formatLapTime(avg)}</span></div>
+      <div><span class="lap-summary-label">Best</span> <span class="lap-best">${formatLapTime(best)}</span> <span class="lap-summary-detail">(Lap ${bestLap.num})</span></div>
+    </div>`;
+  }
+
+  list.innerHTML = html;
 }
 
 function clearLaps() {

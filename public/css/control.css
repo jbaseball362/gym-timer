@@ -244,6 +244,30 @@ body {
   background: #666;
 }
 
+.lap-summary {
+  margin-top: 10px;
+  padding: 10px 0;
+  border-top: 2px solid #444;
+  font-size: 14px;
+  color: #ccc;
+  display: flex;
+  justify-content: space-around;
+}
+
+.lap-summary-label {
+  color: #888;
+  margin-right: 6px;
+}
+
+.lap-best {
+  color: #4CAF50;
+}
+
+.lap-summary-detail {
+  color: #666;
+  font-size: 12px;
+}
+
 .lap-list {
   max-height: 200px;
   overflow-y: auto;
