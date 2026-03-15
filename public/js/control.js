@@ -558,6 +558,33 @@ function togglePrep() {
   sendCommand('set-prep', { enabled: document.getElementById('toggle-prep').checked });
 }
 
+// Confirm destructive actions (Stop/Reset)
+const instantStopModes = ['clock', 'stopwatch', 'countup'];
+let confirmTimer = null;
+function confirmAction(btn, action) {
+  // Stop is instant on timing modes, Reset always confirms
+  if (action === 'stop' && instantStopModes.includes(selectedMode)) {
+    sendCommand(action);
+    return;
+  }
+  if (btn.dataset.confirming === 'true') {
+    clearTimeout(confirmTimer);
+    btn.dataset.confirming = 'false';
+    btn.textContent = action.toUpperCase();
+    btn.classList.remove('confirming');
+    sendCommand(action);
+    return;
+  }
+  btn.dataset.confirming = 'true';
+  btn.textContent = 'SURE?';
+  btn.classList.add('confirming');
+  confirmTimer = setTimeout(() => {
+    btn.dataset.confirming = 'false';
+    btn.textContent = action.toUpperCase();
+    btn.classList.remove('confirming');
+  }, 3000);
+}
+
 // Authentication
 function attemptLogin() {
   const pw = loginPassword.value.trim();

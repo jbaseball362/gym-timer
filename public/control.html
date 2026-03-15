@@ -37,8 +37,8 @@
   <div class="transport">
     <button class="btn-play" onclick="sendCommand('play')">START</button>
     <button class="btn-pause" onclick="sendCommand('pause')">PAUSE</button>
-    <button class="btn-stop" onclick="sendCommand('stop')">STOP</button>
-    <button class="btn-reset" onclick="sendCommand('reset')">RESET</button>
+    <button class="btn-stop" onclick="confirmAction(this, 'stop')">STOP</button>
+    <button class="btn-reset" onclick="confirmAction(this, 'reset')">RESET</button>
   </div>
 
   <!-- Mode selection -->
