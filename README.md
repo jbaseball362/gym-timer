@@ -2,7 +2,7 @@
 
 A full-screen CrossFit gym timer designed for box gyms. Runs on a laptop connected to a TV and is controlled from your phone over WiFi — no apps to install.
 
-![Node.js](https://img.shields.io/badge/Node.js-Express-green) ![Socket.io](https://img.shields.io/badge/Socket.io-realtime-blue)
+![Node.js](https://img.shields.io/badge/Node.js-Express-green) ![Socket.io](https://img.shields.io/badge/Socket.io-realtime-blue) ![Version](https://img.shields.io/badge/version-1.0-blue)
 
 ## How It Works
 
@@ -14,13 +14,18 @@ A full-screen CrossFit gym timer designed for box gyms. Runs on a laptop connect
 
 - **9 timer modes**: Clock, Stopwatch, Countdown, Count Up, EMOM, Tabata, Interval, Fight Gone Bad, Warm Up
 - **20 built-in presets** for common CrossFit workouts
+- **Stopwatch with laps** — hundredths of a second precision, split times, average and best lap tracking (displayed on both controller and TV)
 - **QR code connection** — scan to connect, no URL typing
 - **Audio cues** — 3-2-1 countdown beeps, phase transitions, and "TIME!" voice on completion
 - **Visual indicators** — green (work), red (rest), orange (prep), red pulsing (final 3 seconds)
-- **10-second prep countdown** before each workout
+- **10-second prep countdown** before each workout (togglable)
 - **Coach authentication** — password-protected controller access
 - **Auto-reconnect** — phone reconnects automatically if connection drops
 - **One-click launch** — desktop shortcut starts the server and opens the display
+- **Confirmation taps** — Stop/Reset require a confirmation tap on workout modes to prevent accidental interruptions
+- **Brightness & volume controls** — stepper buttons with audible feedback
+- **Haptic + click feedback** — tactile button presses on both Android and iOS
+- **iOS optimized** — no double-tap zoom, click sound fallback for haptics
 
 ## Quick Start
 
