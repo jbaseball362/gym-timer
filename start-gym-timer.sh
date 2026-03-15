@@ -11,6 +11,34 @@ URL="http://localhost:$PORT"
 # Detect OS
 OS="$(uname -s)"
 
+# Check for Node.js
+if ! command -v node &> /dev/null; then
+  echo "Error: Node.js is not installed."
+  echo "Download it at https://nodejs.org/"
+  exit 1
+fi
+
+# Check for node_modules
+if [ ! -d "node_modules" ]; then
+  echo "Error: Dependencies not installed. Run 'npm install' first."
+  exit 1
+fi
+
+# Check if port is already in use
+if command -v lsof &> /dev/null; then
+  if lsof -iTCP:"$PORT" -sTCP:LISTEN &> /dev/null; then
+    echo "Error: Port $PORT is already in use."
+    echo "Either stop the other process or use a different port: PORT=3001 ./start-gym-timer.sh"
+    exit 1
+  fi
+elif command -v ss &> /dev/null; then
+  if ss -tlnp 2>/dev/null | grep -q ":$PORT "; then
+    echo "Error: Port $PORT is already in use."
+    echo "Either stop the other process or use a different port: PORT=3001 ./start-gym-timer.sh"
+    exit 1
+  fi
+fi
+
 # Start the server in the background
 npm start &
 SERVER_PID=$!
