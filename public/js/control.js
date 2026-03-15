@@ -581,6 +581,19 @@ function recordLap() {
   lastLapTime = currentTime;
   renderLaps();
   sendCommand('lap', { num: lapNum, total: currentTime, split: split });
+
+  // Send summary to display if 2+ laps
+  if (laps.length >= 2) {
+    const splitMs = laps.map(l => parseTimeToMs(l.split));
+    const avg = splitMs.reduce((a, b) => a + b, 0) / splitMs.length;
+    const best = Math.min(...splitMs);
+    const bestLap = laps[splitMs.indexOf(best)];
+    sendCommand('lap-summary', {
+      avg: formatLapTime(avg),
+      best: formatLapTime(best),
+      bestNum: bestLap.num
+    });
+  }
 }
 
 function parseTimeToMs(timeStr) {
@@ -632,7 +645,25 @@ function renderLaps() {
   list.innerHTML = html;
 }
 
-function clearLaps() {
+function clearLaps(btn) {
+  if (btn && laps.length > 0) {
+    if (btn.dataset.confirming === 'true') {
+      clearTimeout(confirmTimer);
+      btn.dataset.confirming = 'false';
+      btn.textContent = 'CLEAR LAPS';
+      btn.classList.remove('confirming');
+    } else {
+      btn.dataset.confirming = 'true';
+      btn.textContent = 'SURE?';
+      btn.classList.add('confirming');
+      confirmTimer = setTimeout(() => {
+        btn.dataset.confirming = 'false';
+        btn.textContent = 'CLEAR LAPS';
+        btn.classList.remove('confirming');
+      }, 3000);
+      return;
+    }
+  }
   laps = [];
   lastLapTime = '0:00';
   const list = document.getElementById('lap-list');

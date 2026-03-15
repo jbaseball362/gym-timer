@@ -19,6 +19,7 @@ const roundInfo = document.getElementById('round-info');
 const phaseLabel = document.getElementById('phase-label');
 const progressContainer = document.getElementById('progress-container');
 const lapDisplay = document.getElementById('lap-display');
+const lapSummaryDisplay = document.getElementById('lap-summary-display');
 const progressBar = document.getElementById('progress-bar');
 
 // Mode display names
@@ -126,14 +127,29 @@ socket.on('command', (data) => {
     case 'reset':
       timer.reset();
       if (lapDisplay) lapDisplay.textContent = '';
+      if (lapSummaryDisplay) {
+        lapSummaryDisplay.innerHTML = '';
+        lapSummaryDisplay.classList.add('hidden');
+      }
       break;
 
     case 'lap':
       if (lapDisplay) lapDisplay.textContent = `Lap ${data.num}  ${data.split}`;
       break;
 
+    case 'lap-summary':
+      if (lapSummaryDisplay) {
+        lapSummaryDisplay.innerHTML = `<span class="lap-summary-label">Avg</span> ${data.avg} &nbsp; <span class="lap-summary-label">Best</span> <span class="lap-best">${data.best}</span> <span class="lap-summary-detail">(Lap ${data.bestNum})</span>`;
+        lapSummaryDisplay.classList.remove('hidden');
+      }
+      break;
+
     case 'clear-laps':
       if (lapDisplay) lapDisplay.textContent = '';
+      if (lapSummaryDisplay) {
+        lapSummaryDisplay.innerHTML = '';
+        lapSummaryDisplay.classList.add('hidden');
+      }
       break;
 
     case 'toggle-24hr':

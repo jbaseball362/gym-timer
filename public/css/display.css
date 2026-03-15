@@ -77,6 +77,26 @@ body.cursor-hidden {
   min-height: 1em;
 }
 
+#lap-summary-display {
+  font-size: 2.2vw;
+  color: #ccc;
+  margin-top: 1vh;
+  letter-spacing: 0.05em;
+}
+
+#lap-summary-display .lap-summary-label {
+  color: #888;
+}
+
+#lap-summary-display .lap-best {
+  color: #4CAF50;
+}
+
+#lap-summary-display .lap-summary-detail {
+  color: #666;
+  font-size: 0.8em;
+}
+
 #phase-label {
   font-size: 5vw;
   font-weight: bold;
