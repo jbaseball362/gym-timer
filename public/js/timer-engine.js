@@ -83,7 +83,7 @@ class TimerEngine {
     if (this.use24hr) {
       return `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
     }
-    const ampm = now.getHours() >= 12 ? 'PM' : 'AM';
+    const ampm = now.getHours() >= 12 ? 'pm' : 'am';
     let hours = now.getHours() % 12;
     if (hours === 0) hours = 12;
     return `${hours}:${String(now.getMinutes()).padStart(2, '0')}\u2009${ampm}`;
