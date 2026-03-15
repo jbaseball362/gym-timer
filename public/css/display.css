@@ -52,6 +52,11 @@ body.cursor-hidden {
   font-size: 28vw;
 }
 
+.ampm {
+  font-size: 0.4em;
+  vertical-align: baseline;
+}
+
 #round-info {
   font-size: 3.5vw;
   color: #aaa;

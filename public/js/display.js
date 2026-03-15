@@ -32,7 +32,11 @@ const MODE_NAMES = {
 
 // Wire up timer callbacks
 timer.onUpdate = (display) => {
-  timeDisplay.textContent = display.time;
+  if (display.mode === 'clock') {
+    timeDisplay.innerHTML = display.time;
+  } else {
+    timeDisplay.textContent = display.time;
+  }
 
   // Auto-scale font based on character count
   timeDisplay.classList.remove('digits-short', 'digits-long');
