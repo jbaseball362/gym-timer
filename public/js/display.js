@@ -172,6 +172,16 @@ socket.on('command', (data) => {
     case 'test-sound':
       audio.go();
       break;
+
+    case 'server-shutdown':
+      timer.stop();
+      timeDisplay.textContent = 'SERVER STOPPED';
+      timeDisplay.classList.add('digits-long');
+      modeLabel.textContent = '';
+      roundInfo.classList.add('hidden');
+      phaseLabel.classList.add('hidden');
+      progressContainer.classList.add('hidden');
+      break;
   }
 });
 
