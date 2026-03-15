@@ -49,11 +49,13 @@ class TimerEngine {
 
     this.use24hr = false;
 
-    this.lastTick = null;
+    // Absolute timestamps to prevent floating-point drift
+    this._absoluteStart = null;
+    this._phaseStart = null;
+    this._lastClockString = '';
     this.tickInterval = null;
 
     this.onUpdate = null;  // callback
-    this.onPhaseChange = null;
     this.onBeep = null;
     this.onComplete = null;
   }
@@ -116,6 +118,9 @@ class TimerEngine {
     this.phaseElapsedMs = 0;
     this.currentRound = 0;
     this.workTimes = null;
+    this._absoluteStart = null;
+    this._phaseStart = null;
+    this._lastClockString = '';
 
     switch (mode) {
       case 'clock':
@@ -203,11 +208,16 @@ class TimerEngine {
         this._startFirstWorkPhase();
       }
       this.status = 'running';
+      this._absoluteStart = performance.now();
+      this._phaseStart = performance.now();
     } else if (this.status === 'paused') {
       this.status = 'running';
+      // Adjust start times to preserve elapsed time across pause
+      const now = performance.now();
+      this._absoluteStart = now - this.elapsedMs;
+      this._phaseStart = now - this.phaseElapsedMs;
     }
 
-    this.lastTick = performance.now();
     this._emitUpdate();
   }
 
@@ -232,6 +242,8 @@ class TimerEngine {
     this.elapsedMs = 0;
     this.phaseElapsedMs = 0;
     this.currentRound = 0;
+    this._absoluteStart = null;
+    this._phaseStart = null;
     this.status = 'stopped';
     this._startTicking();
     this._emitUpdate();
@@ -241,6 +253,7 @@ class TimerEngine {
     this.currentRound = 1;
     this.phase = 'work';
     this.phaseElapsedMs = 0;
+    this._phaseStart = performance.now();
     this._setPhaseDuration();
   }
 
@@ -264,36 +277,45 @@ class TimerEngine {
 
   _startTicking() {
     if (this.tickInterval) clearInterval(this.tickInterval);
-    this.lastTick = performance.now();
-    // Tick at ~60fps for smooth display, but update display every ~100ms
     this.tickInterval = setInterval(() => this._tick(), 50);
   }
 
-  _tick() {
-    const now = performance.now();
-    const delta = now - this.lastTick;
-    this.lastTick = now;
+  // Check for 3-2-1 countdown beeps before phase expiration
+  _checkCountdownBeep(remaining, prevRemaining) {
+    if (remaining <= 3000 && remaining > 0) {
+      const secRemaining = Math.ceil(remaining / 1000);
+      const prevSec = Math.ceil(prevRemaining / 1000);
+      if (secRemaining !== prevSec && this.onBeep) {
+        this.onBeep('tick');
+      }
+    }
+  }
 
+  _tick() {
     if (this.mode === 'clock') {
-      this._emitUpdate();
+      // Only update display when clock string changes (once per minute)
+      const clockString = this.getClockTime();
+      if (clockString !== this._lastClockString) {
+        this._lastClockString = clockString;
+        this._emitUpdate();
+      }
       return;
     }
 
     if (this.status !== 'running') return;
 
-    this.elapsedMs += delta;
-    this.phaseElapsedMs += delta;
+    const now = performance.now();
+    const prevPhaseElapsedMs = this.phaseElapsedMs;
+
+    // Compute elapsed from absolute start times (no floating-point drift)
+    this.elapsedMs = now - this._absoluteStart;
+    this.phaseElapsedMs = now - this._phaseStart;
 
     // Check phase completion
     if (this.phase === 'prep') {
       const remaining = this.phaseDurationMs - this.phaseElapsedMs;
-      if (remaining <= 3000 && remaining > 0) {
-        const secRemaining = Math.ceil(remaining / 1000);
-        const prevSec = Math.ceil((remaining + delta) / 1000);
-        if (secRemaining !== prevSec && this.onBeep) {
-          this.onBeep('tick');
-        }
-      }
+      const prevRemaining = this.phaseDurationMs - prevPhaseElapsedMs;
+      this._checkCountdownBeep(remaining, prevRemaining);
       if (this.phaseElapsedMs >= this.phaseDurationMs) {
         if (this.onBeep) this.onBeep('go');
         this._startFirstWorkPhase();
@@ -303,41 +325,24 @@ class TimerEngine {
     } else if (this.mode === 'countup') {
       if (this.totalDurationMs > 0) {
         const remaining = this.totalDurationMs - this.phaseElapsedMs;
-        if (remaining <= 3000 && remaining > 0) {
-          const secRemaining = Math.ceil(remaining / 1000);
-          const prevSec = Math.ceil((remaining + delta) / 1000);
-          if (secRemaining !== prevSec && this.onBeep) {
-            this.onBeep('tick');
-          }
-        }
+        const prevRemaining = this.totalDurationMs - prevPhaseElapsedMs;
+        this._checkCountdownBeep(remaining, prevRemaining);
         if (this.phaseElapsedMs >= this.totalDurationMs) {
           this._complete();
         }
       }
     } else if (this.mode === 'countdown' || this.mode === 'warmup') {
       const remaining = this.phaseDurationMs - this.phaseElapsedMs;
-      // Beep at 3, 2, 1
-      if (remaining <= 3000 && remaining > 0) {
-        const secRemaining = Math.ceil(remaining / 1000);
-        const prevSec = Math.ceil((remaining + delta) / 1000);
-        if (secRemaining !== prevSec && this.onBeep) {
-          this.onBeep('tick');
-        }
-      }
+      const prevRemaining = this.phaseDurationMs - prevPhaseElapsedMs;
+      this._checkCountdownBeep(remaining, prevRemaining);
       if (this.phaseElapsedMs >= this.phaseDurationMs) {
         this._complete();
       }
     } else {
       // Interval-based modes (emom, fgb, interval, tabata)
       const remaining = this.phaseDurationMs - this.phaseElapsedMs;
-      // Beep at 3, 2, 1
-      if (remaining <= 3000 && remaining > 0) {
-        const secRemaining = Math.ceil(remaining / 1000);
-        const prevSec = Math.ceil((remaining + delta) / 1000);
-        if (secRemaining !== prevSec && this.onBeep) {
-          this.onBeep('tick');
-        }
-      }
+      const prevRemaining = this.phaseDurationMs - prevPhaseElapsedMs;
+      this._checkCountdownBeep(remaining, prevRemaining);
       if (this.phaseElapsedMs >= this.phaseDurationMs) {
         this._nextPhase();
       }
@@ -352,9 +357,9 @@ class TimerEngine {
         // Move to rest
         this.phase = 'rest';
         this.phaseElapsedMs = 0;
+        this._phaseStart = performance.now();
         this._setPhaseDuration();
         if (this.onBeep) this.onBeep('rest');
-        if (this.onPhaseChange) this.onPhaseChange('rest');
       } else if (this.currentRound >= this.totalRounds) {
         // All rounds done
         this._complete();
@@ -362,6 +367,7 @@ class TimerEngine {
         // No rest, go to next work round
         this.currentRound++;
         this.phaseElapsedMs = 0;
+        this._phaseStart = performance.now();
         this._setPhaseDuration();
         if (this.onBeep) this.onBeep('go');
       }
@@ -373,9 +379,9 @@ class TimerEngine {
         this.currentRound++;
         this.phase = 'work';
         this.phaseElapsedMs = 0;
+        this._phaseStart = performance.now();
         this._setPhaseDuration();
         if (this.onBeep) this.onBeep('go');
-        if (this.onPhaseChange) this.onPhaseChange('work');
       }
     }
   }
@@ -490,25 +496,5 @@ class TimerEngine {
     if (this.onUpdate) {
       this.onUpdate(this.getDisplay());
     }
-  }
-
-  // Serialize state for sync
-  serialize() {
-    return {
-      mode: this.mode,
-      status: this.status,
-      phase: this.phase,
-      elapsedMs: this.elapsedMs,
-      phaseElapsedMs: this.phaseElapsedMs,
-      phaseDurationMs: this.phaseDurationMs,
-      totalDurationMs: this.totalDurationMs,
-      currentRound: this.currentRound,
-      totalRounds: this.totalRounds,
-      workTime: this.workTime,
-      restTime: this.restTime,
-      workTimes: this.workTimes,
-      use24hr: this.use24hr,
-      prepCountdown: this.prepCountdown,
-    };
   }
 }
