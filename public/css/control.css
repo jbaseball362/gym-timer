@@ -141,6 +141,10 @@ body {
 .current-time .ampm {
   font-size: 0.45em;
   vertical-align: baseline;
+  display: inline-block;
+  width: 0;
+  overflow: visible;
+  white-space: nowrap;
   margin-left: 0.02em;
 }
 
