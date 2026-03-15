@@ -138,6 +138,12 @@ body {
   font-weight: bold;
 }
 
+.current-time .ampm {
+  font-size: 0.45em;
+  vertical-align: baseline;
+  margin-left: 0.02em;
+}
+
 .current-mode {
   font-size: 14px;
   color: #888;

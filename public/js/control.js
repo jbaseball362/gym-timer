@@ -55,7 +55,7 @@ socket.io.on('reconnect_attempt', () => {
 // Receive state updates from display
 const pauseBtn = document.querySelector('.btn-pause');
 socket.on('state-sync', (state) => {
-  ctrlTime.textContent = state.time || '--:--';
+  ctrlTime.innerHTML = state.time || '--:--';
   ctrlMode.textContent = state.mode ? state.mode.toUpperCase() : '';
 
   ctrlPhase.textContent = state.phaseLabel || '';

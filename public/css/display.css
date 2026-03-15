@@ -53,8 +53,9 @@ body.cursor-hidden {
 }
 
 .ampm {
-  font-size: 0.4em;
+  font-size: 0.35em;
   vertical-align: baseline;
+  margin-left: 0.02em;
 }
 
 #round-info {
