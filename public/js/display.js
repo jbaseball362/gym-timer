@@ -8,6 +8,9 @@ const socket = io();
 const timer = new TimerEngine();
 const audio = new AudioManager();
 
+// State
+let currentBrightness = 5;
+
 // DOM elements
 const body = document.getElementById('display');
 const timeDisplay = document.getElementById('time-display');
@@ -55,7 +58,7 @@ timer.onUpdate = (display) => {
   if (display.urgent) body.classList.add('urgent');
 
   // Apply brightness
-  body.classList.add(`brightness-${timer.brightness || 5}`);
+  body.classList.add(`brightness-${currentBrightness}`);
 
   // Round info
   if (display.round) {
@@ -129,8 +132,7 @@ socket.on('command', (data) => {
       break;
 
     case 'set-brightness':
-      body.className = body.className.replace(/brightness-\d/, '');
-      body.classList.add(`brightness-${data.level}`);
+      currentBrightness = data.level;
       break;
 
     case 'set-volume':
