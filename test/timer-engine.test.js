@@ -644,10 +644,10 @@ describe('getDisplay', () => {
     assert.equal(display.time, '2:00');
   });
 
-  it('interval idle shows work time and round count', () => {
+  it('interval idle shows 0:00 and round count', () => {
     engine.startMode('interval', { workTime: 30, restTime: 10, rounds: 5 });
     const display = engine.getDisplay();
-    assert.equal(display.time, '0:30');
+    assert.equal(display.time, '0:00');
     assert.equal(display.round, '0 / 5');
   });
 

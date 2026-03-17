@@ -471,15 +471,15 @@ class TimerEngine {
           result.progress = this.phaseElapsedMs / this.phaseDurationMs;
           result.urgent = remaining <= 3000;
         } else if (this.phase === 'idle') {
-          result.time = this.formatTime(this.workTime);
+          result.time = '0:00';
           result.round = `0 / ${this.totalRounds}`;
         } else if (this.phase === 'complete') {
-          result.time = '0:00';
+          result.time = this.formatTime(this.phaseDurationMs / 1000);
           result.phaseLabel = 'DONE';
           result.round = `${this.totalRounds} / ${this.totalRounds}`;
         } else {
           const remaining = Math.max(0, this.phaseDurationMs - this.phaseElapsedMs);
-          result.time = this.formatTime(remaining / 1000);
+          result.time = this.formatTime(this.phaseElapsedMs / 1000);
           result.phaseLabel = this.phase === 'work' ? 'WORK' : 'REST';
           result.round = `Round ${this.currentRound} / ${this.totalRounds}`;
           result.progress = this.phaseElapsedMs / this.phaseDurationMs;
