@@ -35,37 +35,43 @@ if [ ! -d "node_modules" ]; then
   exit 1
 fi
 
-# Check if port is already in use
+# Ensure system audio output is at full volume (app's own slider controls the level)
+command -v wpctl &> /dev/null && wpctl set-volume @DEFAULT_AUDIO_SINK@ 1.0
+
+# Check if server is already running on this port
+PORT_IN_USE=false
 if command -v lsof &> /dev/null; then
-  if lsof -iTCP:"$PORT" -sTCP:LISTEN &> /dev/null; then
-    echo "Error: Port $PORT is already in use."
-    echo "Either stop the other process or use a different port: PORT=3001 ./start-gym-timer.sh"
-    exit 1
-  fi
+  lsof -iTCP:"$PORT" -sTCP:LISTEN &> /dev/null && PORT_IN_USE=true
 elif command -v ss &> /dev/null; then
-  if ss -tlnp 2>/dev/null | grep -q ":$PORT "; then
-    echo "Error: Port $PORT is already in use."
-    echo "Either stop the other process or use a different port: PORT=3001 ./start-gym-timer.sh"
-    exit 1
-  fi
+  ss -tlnp 2>/dev/null | grep -q ":$PORT " && PORT_IN_USE=true
 fi
 
-# Start the server in the background
-npm start &
-SERVER_PID=$!
-
-# Wait for the server to be ready
-echo "Starting Gym Timer server..."
-for i in {1..10}; do
+if $PORT_IN_USE; then
   if curl -s "$URL" > /dev/null 2>&1; then
-    break
+    echo "Gym Timer is already running — opening browser..."
+  else
+    echo "Error: Port $PORT is in use by another app."
+    echo "Use a different port: PORT=3001 ./start-gym-timer.sh"
+    exit 1
   fi
-  sleep 1
-done
+else
+  # Start the server in the background
+  npm start &
+  SERVER_PID=$!
 
-if ! curl -s "$URL" > /dev/null 2>&1; then
-  echo "Error: Server failed to start on port $PORT"
-  exit 1
+  # Wait for the server to be ready
+  echo "Starting Gym Timer server..."
+  for i in {1..10}; do
+    if curl -s "$URL" > /dev/null 2>&1; then
+      break
+    fi
+    sleep 1
+  done
+
+  if ! curl -s "$URL" > /dev/null 2>&1; then
+    echo "Error: Server failed to start on port $PORT"
+    exit 1
+  fi
 fi
 
 # Find an available browser

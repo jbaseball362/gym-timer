@@ -28,14 +28,18 @@ class AudioManager {
     this.unlocked = true;
     // Keep AudioContext alive — prevent browser from suspending it
     this._keepAlive = setInterval(() => {
-      if (this.ctx && this.ctx.state === 'running') {
-        const buf = this.ctx.createBuffer(1, 1, 22050);
-        const src = this.ctx.createBufferSource();
-        src.buffer = buf;
-        src.connect(this.ctx.destination);
-        src.start(0);
+      if (this.ctx) {
+        if (this.ctx.state === 'suspended') {
+          this.ctx.resume();
+        } else if (this.ctx.state === 'running') {
+          const buf = this.ctx.createBuffer(1, 1, 22050);
+          const src = this.ctx.createBufferSource();
+          src.buffer = buf;
+          src.connect(this.ctx.destination);
+          src.start(0);
+        }
       }
-    }, 20000);
+    }, 3000);
   }
 
   // Alias for backward compat
@@ -64,18 +68,21 @@ class AudioManager {
     osc.type = type;
     osc.frequency.value = freq;
 
+    // Schedule slightly in future so async resume has time to complete
+    const startTime = this.ctx.currentTime + 0.05;
+
     // Use full volume — the volume property controls the level
     const vol = this.volume * 0.8;
-    gain.gain.setValueAtTime(vol, this.ctx.currentTime);
+    gain.gain.setValueAtTime(vol, startTime);
     // Hold for most of the duration, then fade out
-    gain.gain.setValueAtTime(vol, this.ctx.currentTime + duration * 0.7);
-    gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + duration);
+    gain.gain.setValueAtTime(vol, startTime + duration * 0.7);
+    gain.gain.exponentialRampToValueAtTime(0.001, startTime + duration);
 
     osc.connect(gain);
     gain.connect(this.ctx.destination);
 
-    osc.start();
-    osc.stop(this.ctx.currentTime + duration);
+    osc.start(startTime);
+    osc.stop(startTime + duration);
   }
 
   // Short tick for countdown 3-2-1
