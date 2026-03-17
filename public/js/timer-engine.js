@@ -281,11 +281,11 @@ class TimerEngine {
   }
 
   // Check for 3-2-1 countdown beeps before phase expiration
+  // Checks each threshold independently so a delayed tick can't skip a beep
   _checkCountdownBeep(remaining, prevRemaining) {
-    if (remaining <= 3000 && remaining > 0) {
-      const secRemaining = Math.ceil(remaining / 1000);
-      const prevSec = Math.ceil(prevRemaining / 1000);
-      if (secRemaining !== prevSec && this.onBeep) {
+    if (!this.onBeep) return;
+    for (const threshold of [3000, 2000, 1000]) {
+      if (remaining <= threshold && prevRemaining > threshold && remaining > 0) {
         this.onBeep('tick');
       }
     }

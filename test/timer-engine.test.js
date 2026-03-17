@@ -496,6 +496,19 @@ describe('beep callbacks', () => {
     assert.equal(ticks.length, 3);
   });
 
+  it('fires all missed beeps when a single tick spans multiple second boundaries', () => {
+    // Simulates a delayed/throttled tick jumping from 3.5s to 0.5s remaining in one step
+    engine.startMode('countdown', { duration: 5 });
+    engine.prepCountdown = false;
+    engine.play();
+
+    advanceTime(engine, 1500); // 3.5s remaining — no beeps yet
+    advanceTime(engine, 3000); // jumps to 0.5s remaining — should fire 3s AND 2s AND 1s beeps
+
+    const ticks = beeps.filter(b => b === 'tick');
+    assert.equal(ticks.length, 3);
+  });
+
   it('onComplete callback fires on completion', () => {
     let completed = false;
     engine.onComplete = () => { completed = true; };
